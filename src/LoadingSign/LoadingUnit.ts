@@ -10,6 +10,7 @@ export class LoadingUnit {
     private _spinner: HTMLElement; // 加载状态的图标
     private _background: string; // 加载状态的遮罩的背景色
     private _customClass?: string; // 加载状态的自定义类名
+    private _size?: number; // 加载状态的大小
 
     private _loadingElement?: HTMLElement; // 加载状态的 DOM 节点
 
@@ -26,6 +27,7 @@ export class LoadingUnit {
         spinner?: HTMLElement,
         background: string,
         customClass?: string,
+        size: number,
     }) {
         const {
             target,
@@ -35,7 +37,8 @@ export class LoadingUnit {
             text,
             spinner,
             background,
-            customClass
+            customClass,
+            size,
         } = params;
 
         this._target = target;
@@ -45,9 +48,10 @@ export class LoadingUnit {
         this._text = text;
         this._background = background;
         this._customClass = customClass;
+        this._size = size;
 
         if (spinner instanceof HTMLElement) this._spinner = spinner;
-        else this._spinner = this.generateDefaultSpinner();
+        else this._spinner = this.generateDefaultSpinner(size);
 
         addClassFirst(this._spinner, 'loading__spinner');
     }
@@ -87,11 +91,14 @@ export class LoadingUnit {
     }
 
     // 生成默认的加载状态图标
-    private generateDefaultSpinner(): HTMLElement {
+    private generateDefaultSpinner(size: number): HTMLElement {
         const spinner = document.createElement('div');
         spinner.className = 'default-spinner';
-        const svgElement = new DOMParser().parseFromString(defaultSpinnerSvg, 'image/svg+xml').documentElement;
-        spinner.appendChild(svgElement);
+        // const svgElement = new DOMParser().parseFromString(defaultSpinnerSvg, 'image/svg+xml').documentElement;
+        // spinner.appendChild(svgElement.cloneNode(true));
+        spinner.innerHTML = defaultSpinnerSvg;
+        spinner.style.width = `${size}px`;
+        spinner.style.height = `${size}px`;
         return spinner;
     }
 
@@ -120,9 +127,9 @@ export class LoadingUnit {
         // if (this._body) {
         //     loadingElement.classList.add('loading--body');
         // }
-        // if (this._lock) {
-        //     loadingElement.classList.add('loading--lock');
-        // }
+        if (this._lock) {
+            loadingMask.classList.add('lock');
+        }
         if (this._text) {
             const textElement = document.createElement('div');
             textElement.className = 'loading__text';

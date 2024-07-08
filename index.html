@@ -26,7 +26,12 @@
 </head>
 
 <body>
-  <div id="app"></div>
+  <div id="app">
+    <h1>Loading Sign Test</h1>
+    <p>Click the button to see the loading sign.</p>
+    <button @click="toggleLoading">Toggle Loading</button>
+    <div v-if="loading" style="font-size: 2rem;">⏳</div>
+  </div>
   <script type="module" src="/src/main.ts"></script>
 </body>
 

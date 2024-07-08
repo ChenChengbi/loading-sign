@@ -12,6 +12,7 @@ export class Loading {
         spinner?: HTMLElement,
         background?: string,
         customClass?: string,
+        size?: number,
     }): LoadingUnit {
         const {
             target,
@@ -21,7 +22,8 @@ export class Loading {
             text,
             spinner,
             background = 'rgba(0, 0, 0, 0.7)',
-            customClass
+            customClass,
+            size = 42
         } = options;
 
         if (!body && !target) throw new Error('[Loading] target is required when body is false');
@@ -46,7 +48,8 @@ export class Loading {
             text,
             spinner,
             background,
-            customClass
+            customClass,
+            size,
         });
 
         unit.show();
