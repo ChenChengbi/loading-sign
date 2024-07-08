@@ -3,13 +3,19 @@
   "private": false,
   "version": "0.0.1",
   "description": "Loading animations that run on the front-end interface",
-  "keywords": ["loading", "spinner", "loading animations"],
+  "keywords": [
+    "loading",
+    "spinner",
+    "loading animations"
+  ],
   "author": "Billy Chen",
   "license": "MIT",
   "homepage": "https://github.com/ChenChengbi/loading-sign",
   "repository": "https://github.com/ChenChengbi/loading-sign",
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/loading-sign.umd.cjs",
   "module": "./dist/loading-sign.js",
   "unpkg": "./dist/loading-sign.iife.js",
@@ -26,7 +32,12 @@
     "build:docs": "tsc && vite build --mode docs"
   },
   "devDependencies": {
+    "i": "^0.3.7",
+    "npm": "^10.8.1",
+    "sass": "^1.77.6",
     "typescript": "^5.2.2",
-    "vite": "^5.3.1"
+    "vite": "^5.3.1",
+    "vite-plugin-css-injected-by-js": "^3.5.1",
+    "vite-plugin-dts": "^3.9.1"
   }
 }
