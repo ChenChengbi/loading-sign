@@ -1,6 +1,8 @@
 import './main.scss';
 import { Loading } from './LoadingSign/Loading';
 
-function toggleLoading() {
+document.querySelector('#btn-full-screen')?.addEventListener('click', () => {
     const unit = Loading.service({ body: true, lock: true });
-}
+});
+
+// const unit = Loading.service({ body: true, lock: true });

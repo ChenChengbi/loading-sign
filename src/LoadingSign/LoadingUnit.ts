@@ -13,9 +13,17 @@ export class LoadingUnit {
     private _size?: number; // 加载状态的大小
 
     private _loadingElement?: HTMLElement; // 加载状态的 DOM 节点
+    private _isDestroyed: boolean = false; // 是否已销毁
 
     public get target(): HTMLElement | null {
         return this._target;
+    }
+
+    // 是否可见
+    public get isVisible(): boolean {
+        return this._loadingElement !== undefined &&
+            !this._isDestroyed &&
+            this._loadingElement.style.display !== 'none';
     }
 
     constructor(params: {
@@ -56,6 +64,7 @@ export class LoadingUnit {
         addClassFirst(this._spinner, 'loading__spinner');
     }
 
+    // 展示加载状态
     public show(): void {
         if (!this._loadingElement) {
             this._loadingElement = this.generateLoadingElement();
@@ -66,18 +75,31 @@ export class LoadingUnit {
         else container = this._target;
 
         // 如果已经存在，则不重复添加
+        // (hide 之后不销毁，只隐藏，需要判断是否已经存在；close 之后销毁，不需要判断；但不知道之前是调用了 hide 还是 close，所以还是判断一下)
         if (!container.contains(this._loadingElement)) {
             container.appendChild(this._loadingElement);
         }
 
         // 显示
+        this._isDestroyed = false; // 设置为 false，表示未销毁
         this._loadingElement.style.display = 'block';
     }
 
+    // 隐藏加载状态
     public hide(): void {
         if (this._loadingElement) {
             // 只隐藏，不销毁
             this._loadingElement.style.display = 'none';
+        }
+    }
+
+    // 关闭(销毁)加载状态
+    public close(): void {
+        if (this._loadingElement) {
+            // 销毁
+            this._loadingElement.remove();
+            this._loadingElement = undefined;
+            this._isDestroyed = true; // 设置为 true，表示已销毁
         }
     }
 
