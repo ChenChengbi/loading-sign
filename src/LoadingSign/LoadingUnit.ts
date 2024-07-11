@@ -13,7 +13,14 @@ export class LoadingUnit {
     private _size?: number; // 加载状态的大小
 
     private _loadingElement?: HTMLElement; // 加载状态的 DOM 节点
-    private _isDestroyed: boolean = false; // 是否已销毁
+    private _isClosed: boolean = false; // 是否已销毁
+
+    private get container(): HTMLElement {
+        let container;
+        if (this._body) container = document.body;
+        else container = this._target;
+        return container;
+    }
 
     public get target(): HTMLElement | null {
         return this._target;
@@ -21,9 +28,7 @@ export class LoadingUnit {
 
     // 是否可见
     public get isVisible(): boolean {
-        return this._loadingElement !== undefined &&
-            !this._isDestroyed &&
-            this._loadingElement.style.display !== 'none';
+        return !this._isClosed;
     }
 
     constructor(params: {
@@ -80,18 +85,18 @@ export class LoadingUnit {
             container.appendChild(this._loadingElement);
         }
 
-        // 显示
-        this._isDestroyed = false; // 设置为 false，表示未销毁
+        container.classList.add('loading-parent');
         this._loadingElement.style.display = 'block';
+        this._isClosed = false; // 设置为 false，表示未销毁
     }
 
-    // 隐藏加载状态
-    public hide(): void {
-        if (this._loadingElement) {
-            // 只隐藏，不销毁
-            this._loadingElement.style.display = 'none';
-        }
-    }
+    // // 隐藏加载状态
+    // public hide(): void {
+    //     if (this._loadingElement) {
+    //         // 只隐藏，不销毁
+    //         this._loadingElement.style.display = 'none';
+    //     }
+    // }
 
     // 关闭(销毁)加载状态
     public close(): void {
@@ -99,8 +104,14 @@ export class LoadingUnit {
             // 销毁
             this._loadingElement.remove();
             this._loadingElement = undefined;
-            this._isDestroyed = true; // 设置为 true，表示已销毁
         }
+
+        let container;
+        if (this._body) container = document.body;
+        else container = this._target;
+
+        container.classList.remove('loading-parent');
+        this._isClosed = true; // 设置为 true，表示已销毁
     }
 
     // 生成加载状态的完整 DOM 节点

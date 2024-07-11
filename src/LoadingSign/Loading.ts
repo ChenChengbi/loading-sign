@@ -9,6 +9,18 @@ export class Loading {
     /**
      * 创建一个“加载状态”实例
      * 以服务的方式调用的全屏 Loading 是单例的：若在前一个全屏 Loading 关闭前再次调用全屏 Loading，并不会创建一个新的 Loading 实例，而是返回现有全屏 Loading 的实例
+     * @param options 配置项
+     * @param options.target 加载状态需要覆盖的 DOM 节点
+     * @param options.body 是否在 body 上添加加载状态
+     * @param options.fullscreen 是否全屏显示加载状态
+     * @param options.lock 是否锁定滚动条
+     * @param options.text 加载状态的文本
+     * @param options.spinner 加载状态的图标
+     * @param options.background 加载状态的遮罩的背景色
+     * @param options.customClass 加载状态的自定义类名
+     * @param options.size 加载状态的大小
+     * @throws 当 body 为 false 且 target 不存在时抛出异常
+     * @returns “加载状态”实例
      */
     public static service(options: {
         target?: HTMLElement | string,
@@ -24,7 +36,7 @@ export class Loading {
         const {
             target,
             body = false,
-            fullscreen = true,
+            fullscreen = false,
             lock = false,
             text,
             spinner,
