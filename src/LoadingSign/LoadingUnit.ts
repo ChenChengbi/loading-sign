@@ -75,17 +75,13 @@ export class LoadingUnit {
             this._loadingElement = this.generateLoadingElement();
         }
 
-        let container;
-        if (this._body) container = document.body;
-        else container = this._target;
-
         // 如果已经存在，则不重复添加
-        // (hide 之后不销毁，只隐藏，需要判断是否已经存在；close 之后销毁，不需要判断；但不知道之前是调用了 hide 还是 close，所以还是判断一下)
-        if (!container.contains(this._loadingElement)) {
-            container.appendChild(this._loadingElement);
+        if (!this.container.contains(this._loadingElement)) {
+            this.container.appendChild(this._loadingElement);
         }
 
-        container.classList.add('loading-parent');
+        this.container.classList.add('loading__parent');
+        if (this._lock) this.container.classList.add('loading__parent-lock');
         this._loadingElement.style.display = 'block';
         this._isClosed = false; // 设置为 false，表示未销毁
     }
@@ -100,17 +96,15 @@ export class LoadingUnit {
 
     // 关闭(销毁)加载状态
     public close(): void {
+        if (this._isClosed) return; // 已销毁，不再销毁
+
         if (this._loadingElement) {
-            // 销毁
             this._loadingElement.remove();
             this._loadingElement = undefined;
         }
 
-        let container;
-        if (this._body) container = document.body;
-        else container = this._target;
-
-        container.classList.remove('loading-parent');
+        this.container.classList.remove('loading__parent');
+        this.container.classList.remove('loading__parent-lock');
         this._isClosed = true; // 设置为 true，表示已销毁
     }
 
@@ -155,14 +149,14 @@ export class LoadingUnit {
             loadingMask.classList.add(this._customClass);
         }
         if (this._fullscreen) {
-            loadingMask.classList.add('fullscreen');
+            loadingMask.classList.add('loading__mask-fullscreen');
         }
-        // if (this._body) {
-        //     loadingElement.classList.add('loading--body');
+        if (this._body) {
+            loadingMask.classList.add('loading__mask-body');
+        }
+        // if (this._lock) {
+        //     loadingMask.classList.add('lock');
         // }
-        if (this._lock) {
-            loadingMask.classList.add('lock');
-        }
         if (this._text) {
             const textElement = document.createElement('div');
             textElement.className = 'loading__text';
@@ -170,30 +164,16 @@ export class LoadingUnit {
             loadingMask.appendChild(textElement);
         }
 
+        if (!this._fullscreen && this._body) {
+            // 非全屏且在 body 上添加加载状态时
+            // 计算 _target 的位置，使 loading__mask 与 _target 重合
+            const rect = this._target.getBoundingClientRect();
+            loadingMask.style.top = `${rect.top}px`;
+            loadingMask.style.left = `${rect.left}px`;
+            loadingMask.style.width = `${rect.width}px`;
+            loadingMask.style.height = `${rect.height}px`;
+        }
+
         return loadingMask;
     }
-
-    // public destroy(): void {
-    //     // ...
-    // }
-
-    // private _create(): void {
-    //     // ...
-    // }
-
-    // private _update(): void {
-    //     // ...
-    // }
-
-    // private _destroy(): void {
-    //     // ...
-    // }
-
-    // private _mount(): void {
-    //     // ...
-    // }
-
-    // private _unmount(): void {
-    //     // ...
-    // }
 }

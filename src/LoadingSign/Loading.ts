@@ -5,10 +5,14 @@ export class Loading {
 
     // 全屏 Loading 的单列
     private static fullscreenInstance: LoadingUnit | null = null;
+    // 保存非全屏 Loading 的实例
+    private static loadingUnitsMap: Map<HTMLElement, LoadingUnit> = new Map();
 
     /**
      * 创建一个“加载状态”实例
      * 以服务的方式调用的全屏 Loading 是单例的：若在前一个全屏 Loading 关闭前再次调用全屏 Loading，并不会创建一个新的 Loading 实例，而是返回现有全屏 Loading 的实例
+     * 以服务的方式调用的非全屏 Loading 不是单例的：每次调用都会创建一个新的 Loading 实例；
+     * 但是，若在同一个 DOM 节点上，前一个非全屏 Loading 关闭前再次调用非全屏 Loading，则会返回现有非全屏 Loading 的实例
      * @param options 配置项
      * @param options.target 加载状态需要覆盖的 DOM 节点
      * @param options.body 是否在 body 上添加加载状态
@@ -62,6 +66,9 @@ export class Loading {
         // 若全屏 Loading 已存在，则返回现有全屏 Loading 的实例；否则创建一个新的全屏 Loading 实例
         if (fullscreen && Loading.fullscreenInstance && Loading.fullscreenInstance.isVisible) {
             return Loading.fullscreenInstance;
+        } else if (!fullscreen && Loading.loadingUnitsMap.has(_target) && Loading.loadingUnitsMap.get(_target)?.isVisible) {
+            // 若非全屏 Loading 已存在，则返回现有非全屏 Loading 的实例；否则创建一个新的非全屏 Loading 实例
+            return Loading.loadingUnitsMap.get(_target) as LoadingUnit;
         } else {
             const unit = new LoadingUnit({
                 target: _target,
@@ -74,9 +81,10 @@ export class Loading {
                 customClass,
                 size,
             });
-
             if (fullscreen)
                 Loading.fullscreenInstance = unit;
+            else
+                Loading.loadingUnitsMap.set(_target, unit);
 
             unit.show();
             return unit;

@@ -1,20 +1,29 @@
 import './main.scss';
 import { Loading } from './LoadingSign/Loading';
 
-document.querySelector('#btn-full-screen')?.addEventListener('click', () => {
-    const unit = Loading.service({ body: true, lock: true });
-    setTimeout(() => {
-        unit.close();
-    }, 2000);
+// 加载状态添加到 body 上，全屏显示
+document.querySelector('#btn-body-full-screen')?.addEventListener('click', () => {
+    const unit = Loading.service({ body: true, fullscreen: true, lock: true });
+    // setTimeout(() => { unit.close(); }, 2000);
 });
 
-document.querySelector('#btn-specified-region')?.addEventListener('click', () => {
+// 加载状态添加到 DOM 节点上, 不全屏显示
+document.querySelector('#btn-div-specified-region')?.addEventListener('click', () => {
     const target = document.querySelector('.specified-region') as HTMLElement;
-    console.log('target :>> ', target);
-    const unit = Loading.service({ target, fullscreen: false });
-    // setTimeout(() => {
-    //     unit.close();
-    // }, 5000);
+    const unit = Loading.service({ target, fullscreen: false, lock: true });
+    // setTimeout(() => { unit.close(); }, 2000);
 });
 
-// const unit = Loading.service({ body: true, lock: true });
+// 加载状态添加到 body 上, 不全屏显示
+document.querySelector('#btn-body-specified-region')?.addEventListener('click', () => {
+    const target = document.querySelector('.specified-region') as HTMLElement;
+    const unit = Loading.service({ target, body: true, fullscreen: false, lock: true });
+    // setTimeout(() => { unit.close(); }, 2000);
+});
+
+// 加载状态添加到 DOM 节点上, 全屏显示
+document.querySelector('#btn-div-full-screen')?.addEventListener('click', () => {
+    const target = document.querySelector('.specified-region') as HTMLElement;
+    const unit = Loading.service({ target, fullscreen: true, lock: true });
+    // setTimeout(() => { unit.close(); }, 2000);
+});
