@@ -9,22 +9,24 @@ export class Loading {
     private static loadingUnitsMap: Map<HTMLElement, LoadingUnit> = new Map();
 
     /**
-     * 创建一个“加载状态”实例
+     * 创建一个“加载动画”实例
      * 以服务的方式调用的全屏 Loading 是单例的：若在前一个全屏 Loading 关闭前再次调用全屏 Loading，并不会创建一个新的 Loading 实例，而是返回现有全屏 Loading 的实例
      * 以服务的方式调用的非全屏 Loading 不是单例的：每次调用都会创建一个新的 Loading 实例；
      * 但是，若在同一个 DOM 节点上，前一个非全屏 Loading 关闭前再次调用非全屏 Loading，则会返回现有非全屏 Loading 的实例
      * @param options 配置项
-     * @param options.target 加载状态需要覆盖的 DOM 节点
-     * @param options.body 是否在 body 上添加加载状态
-     * @param options.fullscreen 是否全屏显示加载状态
-     * @param options.lock 是否锁定滚动条
-     * @param options.text 加载状态的文本
-     * @param options.spinner 加载状态的图标
-     * @param options.background 加载状态的遮罩的背景色
-     * @param options.customClass 加载状态的自定义类名
-     * @param options.size 加载状态的大小
+     * @param options.target 加载动画要覆盖的 DOM 节点或 DOM 选择器
+     * @param options.body 是否在 body 上添加加载动画(默认值为 false)
+     * @param options.fullscreen 是否全屏显示加载动画(默认值为 false)
+     * @param options.lock 是否锁定滚动条(默认值为 false)
+     * @param options.text 加载动画的文本
+     * @param options.spinner 加载动画的图标
+     * @param options.background 加载动画的遮罩的背景色(默认值为 'rgba(0, 0, 0, 0.7)'
+     * @param options.customClass 加载动画的自定义类名
+     * @param options.size 加载动画的大小(默认值为 42)
      * @throws 当 body 为 false 且 target 不存在时抛出异常
-     * @returns “加载状态”实例
+     * @throws 当 body 为 true 且 fullscreen 为 false 且 target 不存在时抛出异常
+     * @throws 当 target 为字符串时，且 document.querySelector(target) 不存在时抛出异常
+     * @returns “加载动画”实例
      */
     public static service(options: {
         target?: HTMLElement | string,
@@ -50,6 +52,7 @@ export class Loading {
         } = options;
 
         if (!body && !target) throw new Error('[Loading] target is required when body is false');
+        if (!fullscreen && body && !target) throw new Error('[Loading] target is required when body is true and fullscreen is false');
 
         let _target: HTMLElement;
 

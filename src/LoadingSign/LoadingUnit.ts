@@ -10,7 +10,7 @@ export class LoadingUnit {
     private _spinner: HTMLElement; // 加载状态的图标
     private _background: string; // 加载状态的遮罩的背景色
     private _customClass?: string; // 加载状态的自定义类名
-    private _size?: number; // 加载状态的大小
+    // private _size?: number; // 加载状态的大小
 
     private _loadingElement?: HTMLElement; // 加载状态的 DOM 节点
     private _isClosed: boolean = false; // 是否已销毁
@@ -61,7 +61,7 @@ export class LoadingUnit {
         this._text = text;
         this._background = background;
         this._customClass = customClass;
-        this._size = size;
+        // this._size = size;
 
         if (spinner instanceof HTMLElement) this._spinner = spinner;
         else this._spinner = this.generateDefaultSpinner(size);
@@ -113,6 +113,14 @@ export class LoadingUnit {
         const mask = this.generateLoadingMask();
         const container = this.generateSpinnerContainer();
         container.appendChild(this._spinner);
+
+        if (this._text) {
+            const textElement = document.createElement('div');
+            textElement.className = 'loading__text';
+            textElement.textContent = this._text;
+            container.appendChild(textElement);
+        }
+
         mask.appendChild(container);
         return mask;
     }
@@ -154,15 +162,10 @@ export class LoadingUnit {
         if (this._body) {
             loadingMask.classList.add('loading__mask-body');
         }
+
         // if (this._lock) {
         //     loadingMask.classList.add('lock');
         // }
-        if (this._text) {
-            const textElement = document.createElement('div');
-            textElement.className = 'loading__text';
-            textElement.textContent = this._text;
-            loadingMask.appendChild(textElement);
-        }
 
         if (!this._fullscreen && this._body) {
             // 非全屏且在 body 上添加加载状态时
