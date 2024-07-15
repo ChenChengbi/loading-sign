@@ -1,7 +1,7 @@
 {
   "name": "loading-sign",
   "private": false,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Loading animations that run on the front-end interface",
   "keywords": [
     "loading",
@@ -10,7 +10,7 @@
   ],
   "author": "Billy Chen",
   "license": "MIT",
-  "homepage": "https://github.com/ChenChengbi/loading-sign",
+  "homepage": "https://gitee.com/bi2008/loading-sign",
   "repository": "https://github.com/ChenChengbi/loading-sign",
   "type": "module",
   "files": [
